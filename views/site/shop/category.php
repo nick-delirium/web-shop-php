@@ -4,7 +4,7 @@
                     <div class="col-sm-9 padding-right">
                         <div class="features_items"><!--features_items-->
                             
-                        <h2 class="title text-center">Последние товары в категории ?></h2>
+                        <h2 class="title text-center">Последние товары в категории </h2>
                             <?php foreach($products as $product):?>
                             <div class="col-sm-4">
                                 
@@ -12,10 +12,10 @@
                                     <div class="single-products">
                                         <div class="productinfo text-center">
                                            
-                                            <a href="/product/<?php echo $product['id'];?>"><img src="<?php echo $product['image'];?>" alt="" /> </a>
+                                            <a href="/product/<?php echo $product['id'];?>"><img src="<?= Product::getImage($product['id']);?>" class='properimage' alt="" /> </a>
                                             <h2><?php echo $product['price'].'$'; ?></h2>
                                             <p><?php echo $product['name'];?></p>
-                                            <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>В корзину</a>
+                                             <a href="#" data-id="<?php echo $product['id'];?>" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>В корзину</a>
                                             
                                         </div>
                                         <?php if ($product['is_new'] == 1): ?>

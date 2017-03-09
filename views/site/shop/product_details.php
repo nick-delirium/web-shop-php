@@ -6,7 +6,7 @@
                             <div class="row">
                                 <div class="col-sm-5">
                                     <div class="view-product">
-                                        <img src="<?php echo $product['image'];?>" alt="" />
+                                        <img src="<?= Product::getImage($product['id']);?>" class='properimage' alt="" />
                                     </div>
                                 </div>
                                 <div class="col-sm-7">
@@ -17,11 +17,12 @@
                                         <span>
                                             <span><?php echo $product['price'].'$';?></span>
                                             <label>Количество: </label>
-                                            <input type="text" value="3" />
-                                            <button type="button" class="btn btn-fefault cart">
+                                            <input type="text" name='quantity' value="1" />
+                                            <a href="#" 
+                                               data-id="<?php echo $product['id'];?>" class="btn btn-default add-to-cart">
                                                 <i class="fa fa-shopping-cart"></i>
                                                 В корзину
-                                            </button>
+                                            </a>
                                         </span>
                                         <p><b>Наличие:</b> <?php echo $product['availability'];?></p>
                                         <p><b>Состояние:</b> <?php if ($product['is_new']==1) echo 'Новое'; else echo 'отличное';?></p>

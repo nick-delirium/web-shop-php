@@ -60,9 +60,15 @@
                         <div class="col-sm-8">
                             <div class="shop-menu pull-right">
                                 <ul class="nav navbar-nav">                                    
-                                    <li><a href="#"><i class="fa fa-shopping-cart"></i> Корзина</a></li>
-                                   <li><a href="/login"><i class="fa fa-user"></i> Вход</a></li>
-                                    <li><a href="/register"><i class="fa fa-lock"></i> Регистрация </a></li>
+                                    <li><a href="/cart/"><i class="fa fa-shopping-cart"></i> Корзина (<span id="cart-count"><?php echo Cart::countItems();?></span>)</a></li>
+                                   <li><a href="/profile"><i class="fa fa-user"></i> <?php if(isset($_SESSION['name'])): ?> 
+                                    <?php echo $_SESSION['name']; ?>
+                                    <li><a href='/exit'><i class="fa fa-unlock"></i>Exit</a></li>
+                                   <?php else: ?>
+                                    <?php echo 'Вход'; ?>
+                                       <li><a href="/register"><i class="fa fa-lock"></i> Регистрация </a></li>
+                                    <?php endif;?>
+                                    
                                 </ul>
                             </div>
                         </div>

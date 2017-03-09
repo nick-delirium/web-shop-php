@@ -56,6 +56,60 @@ class Product
 
     }
     
+    
+    public static function Create($options)
+    {
+        $db = Database::Connect();
+        
+        $sql = 'INSERT INTO product '
+                .'(name, price, category_id, brand, availability, is_new, is_recommended, visible, description) '
+                .'VALUES '
+                .'(:name, :price, :category_id, :brand, :availability, :is_new, :is_recommended, :visible, :description)';
+        $result = $db->prepare($sql);
+        $result->bindParam(':name', $options['name'], PDO::PARAM_STR);
+        $result->bindParam(':price', $options['price'], PDO::PARAM_STR);
+        $result->bindParam(':category_id', $options['category_id'], PDO::PARAM_INT);
+        $result->bindParam(':brand', $options['brand'], PDO::PARAM_STR);
+        $result->bindParam(':availability', $options['availability'], PDO::PARAM_INT);
+        $result->bindParam(':is_new', $options['is_new'], PDO::PARAM_INT);
+        $result->bindParam(':is_recommended', $options['is_recommended'], PDO::PARAM_INT);
+        $result->bindParam(':visible', $options['visible'], PDO::PARAM_INT);
+        $result->bindParam(':description', $options['description'], PDO::PARAM_STR);
+        if ($result->execute()) return $db->lastInsertId();
+        else return 0;
+    }
+    
+    public static function Update($id, $options)
+    {
+        $db = Database::Connect();
+        
+        $sql = "UPDATE product SET"
+                ." name = :name,"
+                ." price = :price,"
+                ." category_id = :category_id,"
+                ." brand = :brand,"
+                ." availability = :availability,"
+                ." description = :description,"
+                ." is_new = :is_new,"
+                ." is_recommended = :is_recommended,"
+                ." visible = :visible" 
+            ." WHERE id = :id";
+        
+        $result = $db->prepare($sql);
+        $result->bindParam(':name', $options['name'], PDO::PARAM_STR);
+        $result->bindParam(':price', $options['price'], PDO::PARAM_STR);
+        $result->bindParam(':category_id', $options['category_id'], PDO::PARAM_INT);
+        $result->bindParam(':brand', $options['brand'], PDO::PARAM_STR);
+        $result->bindParam(':availability', $options['availability'], PDO::PARAM_INT);
+        $result->bindParam(':is_new', $options['is_new'], PDO::PARAM_INT);
+        $result->bindParam(':is_recommended', $options['is_recommended'], PDO::PARAM_INT);
+        $result->bindParam(':visible', $options['visible'], PDO::PARAM_INT);
+        $result->bindParam(':description', $options['description'], PDO::PARAM_STR);
+        $result->bindParam(':id', $id, PDO::PARAM_INT);
+        return $result->execute();
+    }
+    
+    
     public static function getProduct($id)
     {
         $id = intval($id);
@@ -67,7 +121,19 @@ class Product
         return $result->fetch();
     }
     
-
+    
+    public static function delite($id)
+    {
+        $db = Database::Connect();
+        $sql = 'DELETE FROM product WHERE id = :id';
+        
+        $result = $db->prepare($sql);
+        $result->bindParam(':id', $id, PDO::PARAM_INT);
+        return $result->execute();
+    }
+    
+    
+    
     public static function getCatProducts($categoryId)
     {
         $db=Database::Connect();
@@ -76,6 +142,60 @@ class Product
         $row = $result->fetch();
         return $row['count'];
     }
+    
+    
+    public static function getProductsList()
+    {
+        $db = Database::Connect();
+        
+        $result = $db->query('SELECT id, name, price, availability, category_id, visible FROM product ORDER BY id ASC');
+        $list = [];
+        
+        for($i=0;$row=$result->fetch();$i++) {
+            $list[$i]['id'] = $row['id'];
+            $list[$i]['name'] = $row['name'];
+            $list[$i]['price'] = $row['price'];
+            $list[$i]['availability'] = $row['availability'];
+            $list[$i]['visible'] = $row['visible'];
+            $list[$i]['category_id'] = $row['category_id'];
+        }
+        return $list;
+    }
+    
+    
+    public static function getSelectedId($array)
+    {
+        $products = [];
+        $db = Database::Connect();
+        $id = implode(',', $array);
+        
+        $sql = "SELECT * FROM product WHERE visible = '1' AND id in ($id)";
+        
+        $result = $db->query($sql);
+        $result->setFetchMode(PDO::FETCH_ASSOC);
+        
+        for($i=0;$row=$result->fetch();$i++) {
+            $products[$i]['id'] = $row['id'];
+            $products[$i]['name'] = $row['name'];
+            $products[$i]['price'] = $row['price'];
+        }
+        return $products;
+    }
 
+	
+	
+	
+	public static function getImage($id)
+	{
+		$noPic = '000.png';
+		$path = '/UPLOADS/PRODUCT/';
+		
+		$pathToImg = $path. $id. '.jpg';
+		if (file_exists($_SERVER['DOCUMENT_ROOT'].$pathToImg))
+		{
+			return $pathToImg;
+		}
+		else return $pathToImg=$path.$noPic;
+	}
 }
 

@@ -6,8 +6,8 @@ class User
     public static function Register($name, $email, $password) 
     {
         $db = Database::Connect();
-        $sql = 'INSERT INTO user (name, email, password) '
-            . 'VALUES (:name, :email, :password)';
+        $sql = 'INSERT INTO user (name, email, password)'
+            .' VALUES (:name, :email, :password)';
         
         $result = $db->prepare($sql);
         $result->bindParam(':name', $name, PDO::PARAM_STR);
@@ -81,17 +81,56 @@ class User
         return false;
     }
     
-    public static function login($userId)
+    public static function checkPhone($phone)
     {
-        session_start();
+        if(strlen($phone) >= 10) return true;
+        else return false;
+    }
+    
+    public static function login($userId, $name)
+    {
         $_SESSION['user'] = $userId;
+        $_SESSION['name'] = $name;
     }
 
     public static function isLogged()
     {
-        session_start();
+        
         if (isset($_SESSION['user'])) return $_SESSION['user'];
-        header("Location: /login/")
+        else header("Location: /login/");
     }
-
+    
+    public static function isGuest()
+    {
+        if (isset($_SESSION['user'])) return false;
+        else return true;
+    }
+    
+    public static function getUser($id)
+    {
+        $id = intval($id);
+        
+        $db = Database::Connect();
+        $sql = 'SELECT * FROM user WHERE id = :id';
+        $result = $db->prepare($sql);
+        $result->bindParam(':id', $id, PDO::PARAM_INT);
+        
+        $result->setFetchMode(PDO::FETCH_ASSOC);
+        $result->execute();
+        
+        return $result->fetch();
+    }
+    
+    public function edit($id, $name, $password, $email)
+    {
+        $db = Database::Connect();
+        $sql = 'UPDATE user SET name = :name, password = :password, email = :email WHERE id = :id';
+        
+        $result = $db->prepare($sql);
+        $result->bindParam(':id', $id, PDO::PARAM_INT);
+        $result->bindParam(':name', $name, PDO::PARAM_STR);
+        $result->bindParam(':email', $email, PDO::PARAM_STR);
+        $result->bindParam(':password', $password, PDO::PARAM_STR);
+        return $result->execute();
+    }
 }

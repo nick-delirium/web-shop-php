@@ -10,7 +10,7 @@ error_reporting(E_ALL);
 define('ROOT', dirname(__FILE__));
 require_once(ROOT.'/components/autoload.php');
 
-
+session_start();
 
 // 4. вызов роутера
 $router = new Router();

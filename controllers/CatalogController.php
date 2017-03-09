@@ -19,7 +19,6 @@ class CatalogController
  
        public function actionCategory($categoryId, $page = 1)
     {
-        echo "page is $page";
         $categories = [];
         $categories = Category::getCategoriesList();
         $products = [];

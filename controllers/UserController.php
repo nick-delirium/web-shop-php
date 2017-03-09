@@ -36,7 +36,6 @@ class UserController
     {
         $name = '';
         $password = '';
-        
         if (isset($_POST['submit'])) {
             $name = $_POST['name'];
             $password = $_POST['password'];
@@ -45,13 +44,27 @@ class UserController
             $userId = User::checkUser($name, $password);
             if (!$userId) $errors[] = 'Wrong password or username';
             else {
-                User::login($userId);
+                User::login($userId, $name);
+                $access = Admin::isAdmin();
                 header("Location: /profile/");
             }
         }
-        require_once(ROOT.'/views/user/login.php');
+        else require_once(ROOT.'/views/user/login.php');
     }
     
-    
+    public static function actionExit()
+    {
+        
+        $_SESSION = array();
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(session_name(), '', time() - 42000,
+            $params["path"], $params["domain"],
+            $params["secure"], $params["httponly"]);
+        }
+        session_destroy();
+        
+        header("Location: /");
+    }
     
 }
