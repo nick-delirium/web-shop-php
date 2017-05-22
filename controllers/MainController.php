@@ -16,7 +16,7 @@ class MainController
         $latestProducts = Product::getLatestProducts(6);
             
         require_once(ROOT.'/views/site/index.php');
-        
+        return true;
     }
     
     
@@ -37,6 +37,7 @@ class MainController
             $result = true; 
         }
         require_once(ROOT.'/views/site/feedback.php');
+		return true;
     }
     
 }

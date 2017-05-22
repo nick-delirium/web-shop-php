@@ -14,7 +14,7 @@ class CatalogController
         $latestProducts = Product::getLatestProducts(12);
             
         require_once(ROOT.'/views/site/shop/catalog.php');
-        
+        return true;
     }
  
        public function actionCategory($categoryId, $page = 1)

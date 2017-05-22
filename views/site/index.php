@@ -1,5 +1,5 @@
 <?php $title = 'Main page';?>
-<?php include ROOT.'/views/site/header.php'?>
+<?php include ROOT.'/views/site/header.php';?>
 
                     <div class="col-sm-9 padding-right">
                         <div class="features_items"><!--features_items-->
